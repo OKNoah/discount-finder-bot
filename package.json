@@ -1,0 +1,36 @@
+{
+  "name": "discount-finder-bot",
+  "version": "0.1.0",
+  "description": "Tracks prices and Tweets when they drop. Uses Amazon, ArangoDB and Twitter. Other APIs and DBs planned.",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/ava",
+    "dev": "nodemon -r dotenv/config -r babel-register index.js",
+    "start": "node -r babel-register index.js"
+  },
+  "ava": {
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
+  },
+  "keywords": [
+    "amazon",
+    "twitter",
+    "arangodb",
+    "bot"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amazon-product-api": "^0.4.4",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "dotenv": "^4.0.0",
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "ava": "^0.23.0"
+  }
+}

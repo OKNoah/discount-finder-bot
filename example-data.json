@@ -1,0 +1,577 @@
+/*
+  This is an example result from Amazon. When you define your fields, use this as a quide. It's taken from a random result, so it may not contain everything. See the Amazon Product Advertising API scratchpad or documentation for more information. 
+
+  Example fields:
+
+  {
+    // Provided by default on all:
+    price: 'OfferListing[0].Price[0].Amount[0]',
+    discount: 'OfferListing[0].AmountSaved[0].Amount[0]',
+    discountPercent: 'OfferListing[0].PercentageSaved[0]',
+    prime: 'OfferListing[0].IsEligibleForPrime[0]',
+
+    // additional defaults:
+    platform: 'ItemAttributes[0].HardwarePlatform[0]',
+    image: 'LargeImage[0].URL[0]',
+    url: 'DetailPageURL[0]',
+    ASIN: 'ASIN[0]',
+    title: 'ItemAttributes[0].Title[0]'
+  }
+*/
+
+[
+  {
+    "ASIN": [
+      /* String */
+    ],
+    "DetailPageURL": [
+      /* String */
+    ],
+    "ItemLinks": [
+      {
+        "ItemLink": [
+          {
+            "Description": [
+              /* String */
+            ],
+            "URL": [
+              /* String */
+            ]
+          },
+          {
+            "Description": [
+              /* String */
+            ],
+            "URL": [
+              /* String */
+            ]
+          },
+          {
+            "Description": [
+              /* String */
+            ],
+            "URL": [
+              /* String */
+            ]
+          },
+          {
+            "Description": [
+              /* String */
+            ],
+            "URL": [
+              /* String */
+            ]
+          }
+        ]
+      }
+    ],
+    "SmallImage": [
+      {
+        "URL": [
+          /* String */
+        ],
+        "Height": [
+          {
+            "_": "75",
+            "$": {
+              "Units": "pixels"
+            }
+          }
+        ],
+        "Width": [
+          {
+            "_": "60",
+            "$": {
+              "Units": "pixels"
+            }
+          }
+        ]
+      }
+    ],
+    "MediumImage": [
+      {
+        "URL": [
+          /* String */
+        ],
+        "Height": [
+          {
+            "_": "160",
+            "$": {
+              "Units": "pixels"
+            }
+          }
+        ],
+        "Width": [
+          {
+            "_": "128",
+            "$": {
+              "Units": "pixels"
+            }
+          }
+        ]
+      }
+    ],
+    "LargeImage": [
+      {
+        "URL": [
+          /* String */
+        ],
+        "Height": [
+          {
+            "_": "500",
+            "$": {
+              "Units": "pixels"
+            }
+          }
+        ],
+        "Width": [
+          {
+            "_": "401",
+            "$": {
+              "Units": "pixels"
+            }
+          }
+        ]
+      }
+    ],
+    "ImageSets": [
+      {
+        "ImageSet": [
+          {
+            "$": {
+              "Category": "primary"
+            },
+            "SwatchImage": [
+              {
+                "URL": [
+                  /* String */
+                ],
+                "Height": [
+                  {
+                    "_": "30",
+                    "$": {
+                      "Units": "pixels"
+                    }
+                  }
+                ],
+                "Width": [
+                  {
+                    "_": "24",
+                    "$": {
+                      "Units": "pixels"
+                    }
+                  }
+                ]
+              }
+            ],
+            "SmallImage": [
+              {
+                "URL": [
+                  /* String */
+                ],
+                "Height": [
+                  {
+                    "_": "75",
+                    "$": {
+                      "Units": "pixels"
+                    }
+                  }
+                ],
+                "Width": [
+                  {
+                    "_": "60",
+                    "$": {
+                      "Units": "pixels"
+                    }
+                  }
+                ]
+              }
+            ],
+            "ThumbnailImage": [
+              {
+                "URL": [
+                  /* String */
+                ],
+                "Height": [
+                  {
+                    "_": "75",
+                    "$": {
+                      "Units": "pixels"
+                    }
+                  }
+                ],
+                "Width": [
+                  {
+                    "_": "60",
+                    "$": {
+                      "Units": "pixels"
+                    }
+                  }
+                ]
+              }
+            ],
+            "TinyImage": [
+              {
+                "URL": [
+                  /* String */
+                ],
+                "Height": [
+                  {
+                    "_": "110",
+                    "$": {
+                      "Units": "pixels"
+                    }
+                  }
+                ],
+                "Width": [
+                  {
+                    "_": "88",
+                    "$": {
+                      "Units": "pixels"
+                    }
+                  }
+                ]
+              }
+            ],
+            "MediumImage": [
+              {
+                "URL": [
+                  /* String */
+                ],
+                "Height": [
+                  {
+                    "_": "160",
+                    "$": {
+                      "Units": "pixels"
+                    }
+                  }
+                ],
+                "Width": [
+                  {
+                    "_": "128",
+                    "$": {
+                      "Units": "pixels"
+                    }
+                  }
+                ]
+              }
+            ],
+            "LargeImage": [
+              {
+                "URL": [
+                  /* String */
+                ],
+                "Height": [
+                  {
+                    "_": "500",
+                    "$": {
+                      "Units": "pixels"
+                    }
+                  }
+                ],
+                "Width": [
+                  {
+                    "_": "401",
+                    "$": {
+                      "Units": "pixels"
+                    }
+                  }
+                ]
+              }
+            ],
+            "HiResImage": [
+              {
+                "URL": [
+                  /* String */
+                ],
+                "Height": [
+                  {
+                    "_": "1900",
+                    "$": {
+                      "Units": "pixels"
+                    }
+                  }
+                ],
+                "Width": [
+                  {
+                    "_": "1523",
+                    "$": {
+                      "Units": "pixels"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "ItemAttributes": [
+      {
+        "Binding": [
+          /* String */
+        ],
+        "Brand": [
+          /* String */
+        ],
+        "EAN": [
+          /* String */
+        ],
+        "EANList": [
+          {
+            "EANListElement": [
+              /* String */
+            ]
+          }
+        ],
+        "ESRBAgeRating": [
+          /* String */
+        ],
+        "Feature": [
+          /* String */,
+          /* String */
+        ],
+        "Genre": [
+          /* String */
+        ],
+        "HardwarePlatform": [
+          /* String */
+        ],
+        "Label": [
+          /* String */
+        ],
+        "Languages": [
+          {
+            "Language": [
+              {
+                "Name": [
+                  /* String */
+                ],
+                "Type": [
+                  /* String */
+                ]
+              },
+              {
+                "Name": [
+                  /* String */
+                ],
+                "Type": [
+                  /* String */
+                ]
+              }
+            ]
+          }
+        ],
+        "ListPrice": [
+          {
+            "Amount": [
+              /* String */
+            ],
+            "CurrencyCode": [
+              /* String */
+            ],
+            "FormattedPrice": [
+              /* String */
+            ]
+          }
+        ],
+        "Manufacturer": [
+          /* String */
+        ],
+        "Model": [
+          /* String */
+        ],
+        "MPN": [
+          /* String */
+        ],
+        "OperatingSystem": [
+          /* String */
+        ],
+        "PackageDimensions": [
+          {
+            "Height": [
+              {
+                "_": "63",
+                "$": {
+                  "Units": "hundredths-inches"
+                }
+              }
+            ],
+            "Length": [
+              {
+                "_": "677",
+                "$": {
+                  "Units": "hundredths-inches"
+                }
+              }
+            ],
+            "Weight": [
+              {
+                "_": "13",
+                "$": {
+                  "Units": "hundredths-pounds"
+                }
+              }
+            ],
+            "Width": [
+              {
+                "_": "535",
+                "$": {
+                  "Units": "hundredths-inches"
+                }
+              }
+            ]
+          }
+        ],
+        "PackageQuantity": [
+          /* String */
+        ],
+        "PartNumber": [
+          /* String */
+        ],
+        "Platform": [
+          /* String */
+        ],
+        "ProductGroup": [
+          /* String */
+        ],
+        "ProductTypeName": [
+          /* String */
+        ],
+        "Publisher": [
+          /* String */
+        ],
+        "ReleaseDate": [
+          /* String */
+        ],
+        "Studio": [
+          /* String */
+        ],
+        "Title": [
+          /* String */
+        ],
+        "UPC": [
+          /* String */
+        ],
+        "UPCList": [
+          {
+            "UPCListElement": [
+              /* String */
+            ]
+          }
+        ]
+      }
+    ],
+    "OfferSummary": [
+      {
+        "LowestNewPrice": [
+          {
+            "Amount": [
+              /* String */
+            ],
+            "CurrencyCode": [
+              /* String */
+            ],
+            "FormattedPrice": [
+              /* String */
+            ]
+          }
+        ],
+        "TotalNew": [
+          /* String */
+        ],
+        "TotalUsed": [
+          /* String */
+        ],
+        "TotalCollectible": [
+          /* String */
+        ],
+        "TotalRefurbished": [
+          /* String */
+        ]
+      }
+    ],
+    "Offers": [
+      {
+        "TotalOffers": [
+          /* String */
+        ],
+        "TotalOfferPages": [
+          /* String */
+        ],
+        "MoreOffersUrl": [
+          /* String */
+        ],
+        "Offer": [
+          {
+            "OfferAttributes": [
+              {
+                "Condition": [
+                  /* String */
+                ]
+              }
+            ],
+            "OfferListing": [
+              {
+                "OfferListingId": [
+                  /* String */
+                ],
+                "Price": [
+                  {
+                    "Amount": [
+                      /* String */
+                    ],
+                    "CurrencyCode": [
+                      /* String */
+                    ],
+                    "FormattedPrice": [
+                      /* String */
+                    ]
+                  }
+                ],
+                "AmountSaved": [
+                  {
+                    "Amount": [
+                      /* String */
+                    ],
+                    "CurrencyCode": [
+                      /* String */
+                    ],
+                    "FormattedPrice": [
+                      /* String */
+                    ]
+                  }
+                ],
+                "PercentageSaved": [
+                  /* String */
+                ],
+                "Availability": [
+                  /* String */
+                ],
+                "AvailabilityAttributes": [
+                  {
+                    "AvailabilityType": [
+                      /* String */
+                    ],
+                    "MinimumHours": [
+                      /* String */
+                    ],
+                    "MaximumHours": [
+                      /* String */
+                    ]
+                  }
+                ],
+                "IsEligibleForSuperSaverShipping": [
+                  /* String */
+                ],
+                "IsEligibleForPrime": [
+                  /* String */
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
