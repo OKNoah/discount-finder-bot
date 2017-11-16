@@ -5,14 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/ava",
-    "dev": "nodemon -r dotenv/config -r babel-register index.js",
-    "start": "node -r babel-register index.js"
+    "dev": "nodemon -r dotenv/config -r @babel/register index.js",
+    "start": "node -r @babel/register index.js"
   },
   "ava": {
     "require": [
-      "babel-register"
-    ],
-    "babel": "inherit"
+      "@babel/register"
+    ]
   },
   "keywords": [
     "amazon",
@@ -23,12 +22,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/core": "^7.0.0-beta.32",
+    "@babel/plugin-transform-runtime": "^7.0.0-beta.32",
+    "@babel/preset-env": "^7.0.0-beta.32",
+    "@babel/preset-stage-0": "^7.0.0-beta.32",
+    "@babel/register": "^7.0.0-beta.32",
+    "@babel/runtime": "^7.0.0-beta.32",
     "amazon-product-api": "^0.4.4",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-stage-0": "^6.24.1",
-    "babel-register": "^6.26.0",
     "dotenv": "^4.0.0",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "ormjs": "github:oknoah/ormjs"
   },
   "devDependencies": {
     "ava": "^0.23.0"
