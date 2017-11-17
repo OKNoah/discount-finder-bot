@@ -31,7 +31,9 @@
     "amazon-product-api": "^0.4.4",
     "dotenv": "^4.0.0",
     "lodash": "^4.17.4",
-    "ormjs": "github:oknoah/ormjs"
+    "ormjs": "github:oknoah/ormjs",
+    "superagent": "^3.8.1",
+    "twitter": "^1.7.1"
   },
   "devDependencies": {
     "ava": "^0.23.0"
