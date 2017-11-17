@@ -2,7 +2,7 @@
 
 DFB is a simple bot to find discounts on various websites and do things with them, like save them to a database, queue them for tweeting, etc.
 
-Since it's in active developement, see the `index.test.js` file for it's current functionality. Here is an idea as of the time of this writing:
+See `index.test.js` and `examples/` for additional help. This is in active development.
 
 ### Instiantiting client
 
@@ -23,7 +23,7 @@ const bot = new Bot({
 
 #### Database functionality
 
-Currently ArangoDB is supported.
+Currently ArangoDB is supported. You can install it on macOS with Brew. There is also a Docker package for installing on production.
 
 ```js
 const bot = new Bot({
@@ -58,13 +58,32 @@ Offer - Collection of offers. Updates whenever a price changes.
 
 Alert - Queue of price drops between offers.
 
+### bot.tweet
+
+This will look in the queue of saved price alerts and tweet one. You can also include a search query and limit on how many to tweet (1 is the default).
+
+```js
+bot.tweetFromQueue({
+  limit: 2,
+  platform: 'playstation 4'
+})
+```
+
 ## Setup
 
 ```
 npm install
 ```
 
-For future arangodb support, you'll need to install ArangoDB. It's available on Homebrew.
+For arangodb support, you'll need to install ArangoDB. It's available on Homebrew.
+
+## Future development
+
+If initial interest is good, and time allows, I'll consider adding:
+
+- Price history graphs
+- Graphics rendered on image
+- Interaction
 
 ## Contributing
 

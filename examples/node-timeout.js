@@ -4,12 +4,6 @@ const tweetInterval = 10 * 60 * 1000
 const searchInterval = 30 * 60 * 1000
 
 const {
-  awsId,
-  awsSecret,
-  awsTag,
-  domain,
-  arangoUrl,
-  arangoDb,
   twitterConsumerKey,
   twitterConsumerSecret,
   twitterTokenKey,
@@ -17,12 +11,7 @@ const {
 } = process.env
 
 const bot = new Bot({
-  awsId,
-  awsSecret,
-  awsTag,
-  domain,
-  arangoUrl,
-  arangoDb,
+  ...process.env,
   twitter: {
     consumerKey: twitterConsumerKey,
     consumerSecret: twitterConsumerSecret,
