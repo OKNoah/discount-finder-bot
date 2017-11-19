@@ -3,15 +3,19 @@ import Bot from '../index'
 const tweetInterval = 10 * 60 * 1000
 const searchInterval = 30 * 60 * 1000
 
-const {
-  twitterConsumerKey,
-  twitterConsumerSecret,
-  twitterTokenKey,
-  twitterTokenSecret
-} = process.env
+const { twitterConsumerKey, twitterConsumerSecret, twitterTokenKey, twitterTokenSecret } = process.env
+
+const { awsId, awsSecret, awsTag } = process.env
+
+const { arangoUrl, arangoDb } = process.env
 
 const bot = new Bot({
-  ...process.env,
+  arango: {
+    arangoUrl, arangoDb
+  },
+  amazon: {
+    awsId, awsSecret, awsTag
+  },
   twitter: {
     consumerKey: twitterConsumerKey,
     consumerSecret: twitterConsumerSecret,

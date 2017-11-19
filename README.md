@@ -58,7 +58,7 @@ Offer - Collection of offers. Updates whenever a price changes.
 
 Alert - Queue of price drops between offers.
 
-### bot.tweet
+### bot.tweetFromQueue
 
 This will look in the queue of saved price alerts and tweet one. You can also include a search query and limit on how many to tweet (1 is the default).
 
@@ -66,6 +66,16 @@ This will look in the queue of saved price alerts and tweet one. You can also in
 bot.tweetFromQueue({
   limit: 2,
   platform: 'playstation 4'
+})
+```
+
+### bot.blacklist
+
+You can black list a product from the current twitter account by using `bot.blacklist(qeury)`. The product will still be tracked, but no alerts will be sent. You can undo this with `bot._removeBlacklist(query)`. This is compatible with multiple Twitter accounts if you run the bot from the same database.
+
+```js
+bot.blacklist({
+  ASIN: 'B00KAI3KW2'
 })
 ```
 
