@@ -1,5 +1,5 @@
-import amazon from 'amazon-product-api'
-import { get, sortBy, truncate } from 'lodash'
+import amazonApi from 'amazon-product-api'
+import { get, sortBy, truncate, pull } from 'lodash'
 import orm from 'ormjs'
 import Twitter from 'twitter'
 import superagent from 'superagent'
@@ -12,9 +12,9 @@ const defaultFields = {
   browseNode: 'BrowseNodes[0].BrowseNode[0].BrowseNodeId[0]'
 }
 
-const deafultSearch = {
+const defaultSearch = {
   searchIndex: 'VideoGames',
-  minPercentageOff: 20
+  minPercentageOff: 1
 }
 
 export default class ProductBot {
@@ -28,6 +28,7 @@ export default class ProductBot {
 
   constructor (credentials = {}, fields = {}) {
     this.domain = credentials.domain || 'webservices.amazon.ca'
+    const { twitter, amazon, arango } = credentials
 
     this.fields = {
       ...this.fields,
@@ -35,8 +36,8 @@ export default class ProductBot {
       ...fields
     }
 
-    if (credentials.twitter) {
-      const { consumerKey, consumerSecret, accessTokenKey, accessTokenSecret } = credentials.twitter
+    if (twitter) {
+      const { consumerKey, consumerSecret, accessTokenKey, accessTokenSecret } = twitter
 
       this.twitter = new Twitter({
         consumer_key: consumerKey,
@@ -46,19 +47,16 @@ export default class ProductBot {
       })
     }
 
-    if (credentials.domain) {
-      delete credentials.domain
-    }
-
-    if (credentials.arangoUrl) {
+    if (arango) {
       const db = orm.connect({
-        url: credentials.arangoUrl,
-        database: credentials.arangoDb
+        url: arango.arangoUrl,
+        database: arango.arangoDb
       })
       const { Model, Edge } = db
 
       const productSchema = {
-        ASIN: { $type: String, unique: true }
+        ASIN: { $type: String, unique: true },
+        blacklist: { $type: [Number], optional: true }
       }
 
       for (const key in {...fields, ...defaultFields}) {
@@ -97,46 +95,68 @@ export default class ProductBot {
       this.db = db
     }
 
-    try {
-      this.client = amazon.createClient(credentials)
-    } catch (error) {
-      console.error(error)
+    if (amazon) {
+      try {
+        this.amazon = amazonApi.createClient(amazon)
+      } catch (error) {
+        console.error(error)
+      }
     }
+
+    this._init()
   }
 
-  async _search (query, args) {
+  async _init () {
+    if (!this.twitterId) {
+      const twitterUser = await this.twitter.get('account/verify_credentials', {})
+      this.twitterId = twitterUser.id
+    }
+
+    return
+  }
+
+  async _search (...args) {
     const results = []
 
-    try {
-      for (let i = 0; i < args.results; i += 10) {
-        let items = []
+    if (this.amazon) {
+      const items = await this._searchAmazon(...args)
 
-        try {
-          items = await this.client.itemSearch({
-            responseGroup: 'ItemAttributes,Offers,Images,BrowseNodes',
-            sort: 'salesrank',
-            keywords: query,
-            domain: this.domain,
-            ...deafultSearch,
-            ...args,
-            itemPage: (i / 10) + 1
-          })
-        } catch (error) {
-          console.log(error[0])
-          break
-        }
+      results.push(...items)
+    }
 
-        const overLimit = args.results < results.length + items.length
-        const remainder = args.results % results.length
+    return results
+  }
 
-        if (overLimit) {
-          results.push(...items.slice(0, remainder))
-        } else {
-          results.push(...items)
-        }
+  async _searchAmazon (query, args) {
+    const results = []
+    const limit = args.limit || 20
+
+    for (let i = 0; i < limit; i += 10) {
+      let items = []
+
+      try {
+        items = await this.amazon.itemSearch({
+          responseGroup: 'ItemAttributes,Offers,Images,BrowseNodes',
+          sort: 'salesrank',
+          keywords: query,
+          domain: this.domain,
+          ...defaultSearch,
+          ...args,
+          itemPage: (i / 10) + 1
+        })
+      } catch (error) {
+        console.log('error', error)
+        break
       }
-    } catch (error) {
-      console.error(error[0].Error)
+
+      const overLimit = limit < results.length + items.length
+      const remainder = limit % results.length
+
+      if (overLimit) {
+        results.push(...items.slice(0, remainder))
+      } else {
+        results.push(...items)
+      }
     }
 
     return results
@@ -145,7 +165,7 @@ export default class ProductBot {
   async _format (items) {
     const formatted = items.map(item => {
       const offers = get(item, 'Offers[0].Offer')
-      const sortedOffers = sortBy(offers, offer => +get(offer, 'OfferListing[0].Price[0].Amount[0]'), 0).reverse()
+      const sortedOffers = sortBy(offers, offer => +get(offer, 'OfferListing[0].Price[0].Amount[0]', 9999))
       const price = +get(sortedOffers[0], 'OfferListing[0].Price[0].Amount[0]', 0) / 100
       const discount = +get(sortedOffers[0], 'OfferListing[0].AmountSaved[0].Amount[0]', 0) / 100
       const discountPercent = +get(sortedOffers[0], 'OfferListing[0].PercentageSaved[0]', 0)
@@ -183,7 +203,7 @@ export default class ProductBot {
           platform: platform && platform.toLowerCase().replace('_', '')
         })
       } catch (e) {
-        console.log('e', e)
+        // console.log('e', e)
         try {
           product = await this.Product.findOne({
             where: { ASIN: item.ASIN }
@@ -244,6 +264,12 @@ export default class ProductBot {
     const aql = `
       for p in Product
         ${filters}
+        let blacklist = (
+            for id in p.blacklist
+                filter id == @twitterId
+                return id
+        )
+        filter length(blacklist) < 1
         for o in Offer
             filter o.product == p._id
             for a in Alert
@@ -259,7 +285,10 @@ export default class ProductBot {
 
     const queue = await db.query({
       query: aql,
-      bindVars: query
+      bindVars: {
+        ...query,
+        twitterId: this.twitterId
+      }
     })
 
     return queue.all()
@@ -310,6 +339,35 @@ export default class ProductBot {
     return tweeted
   }
 
+  async _blacklist (query) {
+    const item = await this.Product.findOne({
+      where: query
+    })
+
+    if (!item.blacklist) {
+      item.blacklist = []
+    }
+
+    item.blacklist.push(this.twitterId)
+    await item.save()
+
+    return await item.update()
+  }
+
+  async _removeBlacklist (query) {
+    const item = await this.Product.findOne({
+      where: query
+    })
+
+    if (item.blacklist) {
+      pull(item.blacklist, this.twitterId)
+    }
+
+    await item.save()
+    await item.update()
+    return item
+  }
+
   /* "Public" methods */
 
   async search (query, args = { results: 20 }) {
@@ -351,5 +409,11 @@ export default class ProductBot {
     }
 
     return tweets
+  }
+
+  async blacklist (query = {}) {
+    const item = await this._blacklist(query)
+
+    return item
   }
 }

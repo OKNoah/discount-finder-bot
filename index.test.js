@@ -1,41 +1,24 @@
 import test from 'ava'
-import Bot from './index'
+import bot from './examples/create-instance.js'
 
-require('dotenv').config()
+const switchNode = 16329255011 // switch games
+const ps4Node = 6458584011 // ps4 games
 
-const {
-  awsId,
-  awsSecret,
-  awsTag,
-  domain,
-  arangoUrl,
-  arangoDb,
-  twitterConsumerKey,
-  twitterConsumerSecret,
-  twitterTokenKey,
-  twitterTokenSecret
-} = process.env
+let products = []
 
-const bot = new Bot({
-  awsId,
-  awsSecret,
-  awsTag,
-  domain,
-  arangoUrl,
-  arangoDb,
-  twitter: {
-    consumerKey: twitterConsumerKey,
-    consumerSecret: twitterConsumerSecret,
-    accessTokenSecret: twitterTokenSecret,
-    accessTokenKey: twitterTokenKey
-  }
+test.before('before', async (t) => {
+  products = await bot.search('psvr', {
+    browseNode: ps4Node
+  })
+
+  t.truthy(products)
 })
 
 test('finds some products', async (t) => {
-  const results = await bot.search('playstation', {
-    results: 15,
-    searchIndex: 'VideoGames',
-    minPercentageOff: 20
+  const results = await bot.search('psvr', {
+    browseNode: ps4Node,
+    minPercentageOff: 1,
+    limit: 15
   })
 
   t.is(results.length, 15)
@@ -43,9 +26,9 @@ test('finds some products', async (t) => {
 
 test('find and save to database', async (t) => {
   const results = await bot.searchAndSave('', {
-    results: 15,
+    limit: 15,
     searchIndex: 'VideoGames',
-    browseNode: 16329255011,
+    browseNode: switchNode,
     minPercentageOff: 1
   })
 
@@ -59,14 +42,30 @@ test('get alert queue', async (t) => {
     platform: 'nintendo switch'
   })
 
-  t.truthy(queue)
+  t.truthy(queue.length)
 })
 
 test('tweet from queue', async (t) => {
   const tweeted = await bot.tweetFromQueue({
     limit: 1,
-    place_id: '1e5cb4d0509db554'
+    platform: 'nintendo switch'
   })
 
   t.truthy(tweeted)
+})
+
+test('blacklist product', async (t) => {
+  const blacklisted = await bot.blacklist({
+    ASIN: products[0].ASIN
+  })
+
+  t.truthy(blacklisted.blacklist.length >= 1)
+})
+
+test.after('remove blacklist', async (t) => {
+  const blacklisted = await bot._removeBlacklist({
+    ASIN: products[0].ASIN
+  })
+
+  t.falsy(blacklisted.blacklist.length)
 })
